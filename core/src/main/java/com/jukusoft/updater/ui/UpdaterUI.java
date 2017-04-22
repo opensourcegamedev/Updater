@@ -51,9 +51,12 @@ public class UpdaterUI extends Updater {
     //progress bar
     protected FilledBar filledBar = null;
 
+    protected String updateText = "Connect to update server...";
+
     protected ShapeRenderer shapeRenderer = null;
 
     protected BitmapFont font = null;
+    protected BitmapFont fontWhite = null;
 
     @Override
     protected void onCreate(AssetManager assetManager) {
@@ -125,6 +128,7 @@ public class UpdaterUI extends Updater {
 
         //create font
         this.font = BitmapFontFactory.createFont("./data/launcher/font/arial/arial.ttf", 36, Color.BLUE);
+        this.fontWhite = BitmapFontFactory.createFont("./data/launcher/font/arial/arial.ttf", 26, Color.WHITE);
 
         this.filledBar = new FilledBar(this.font);
         this.filledBar.setPosition(200, 200);
@@ -160,6 +164,8 @@ public class UpdaterUI extends Updater {
             batch.begin();
 
             this.filledBar.drawLayer2(time, batch);
+
+            this.fontWhite.draw(batch, this.updateText, 160, 300);
         }
     }
 
