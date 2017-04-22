@@ -2,15 +2,20 @@ package com.jukusoft.updater.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jukusoft.updater.Updater;
 import com.jukusoft.updater.config.AppConfig;
+import com.jukusoft.updater.font.BitmapFontFactory;
 import com.jukusoft.updater.skin.SkinFactory;
 import com.jukusoft.updater.utils.FileUtils;
 import com.jukusoft.updater.utils.GameTime;
@@ -34,6 +39,7 @@ public class UpdaterUI extends Updater {
     protected Skin uiSkin = null;
     protected Stage uiStage = null;
 
+    protected boolean isUpdating = false;
     protected boolean updateable = false;
 
     protected AppConfig appConfig = new AppConfig();
@@ -41,6 +47,13 @@ public class UpdaterUI extends Updater {
     //buttons
     protected TextButton updateButton = null;
     protected TextButton startButton = null;
+
+    //progress bar
+    protected FilledBar filledBar = null;
+
+    protected ShapeRenderer shapeRenderer = null;
+
+    protected BitmapFont font = null;
 
     @Override
     protected void onCreate(AssetManager assetManager) {
@@ -106,6 +119,19 @@ public class UpdaterUI extends Updater {
 
             System.exit(1);
         }
+
+        //create shape renderer
+        this.shapeRenderer = new ShapeRenderer();
+
+        //create font
+        this.font = BitmapFontFactory.createFont("./data/launcher/font/arial/arial.ttf", 36, Color.BLUE);
+
+        this.filledBar = new FilledBar(this.font);
+        this.filledBar.setPosition(200, 200);
+        this.filledBar.setDimension(200, 50);
+        this.filledBar.setMaxValue(100);
+        this.filledBar.setValue(1);
+        this.filledBar.setText("1%");
     }
 
     @Override
@@ -115,6 +141,26 @@ public class UpdaterUI extends Updater {
 
         //draw UI stage
         this.uiStage.draw();
+
+        if (isUpdating) {
+            this.filledBar.update(time);
+
+            this.filledBar.drawLayer0(time, batch);
+
+            batch.end();
+
+            //draw progress bar
+            shapeRenderer.setProjectionMatrix(uiCamera.combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+            this.filledBar.drawLayer1(time, shapeRenderer);
+
+            shapeRenderer.end();
+
+            batch.begin();
+
+            this.filledBar.drawLayer2(time, batch);
+        }
     }
 
     protected void startGame () {
@@ -150,6 +196,8 @@ public class UpdaterUI extends Updater {
 
         //hide start button while updating game
         startButton.setVisible(false);
+
+        this.isUpdating = true;
     }
 
 }
