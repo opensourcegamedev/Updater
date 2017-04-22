@@ -65,7 +65,7 @@ public class UpdaterUI extends Updater {
         Gdx.input.setInputProcessor(this.uiStage);
 
         this.updateButton = new TextButton("Update", this.uiSkin);
-        this.updateButton.setPosition(VIEWPORT_WIDTH - 220, 20);
+        this.updateButton.setPosition(VIEWPORT_WIDTH - 240, 20);
         this.updateButton.setWidth(100);
         this.updateButton.setHeight(50);
         this.updateButton.addListener(new ClickListener() {
@@ -145,7 +145,11 @@ public class UpdaterUI extends Updater {
     }
 
     protected void updateGame () {
-        //
+        //hide update button
+        updateButton.setVisible(false);
+
+        //hide start button while updating game
+        startButton.setVisible(false);
     }
 
 }
