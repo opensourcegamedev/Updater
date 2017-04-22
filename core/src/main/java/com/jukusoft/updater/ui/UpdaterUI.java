@@ -23,6 +23,8 @@ public class UpdaterUI extends Updater {
     protected Skin uiSkin = null;
     protected Stage uiStage = null;
 
+    protected boolean updateable = false;
+
     @Override
     protected void onCreate(AssetManager assetManager) {
         //TODO: read background image from configuration
