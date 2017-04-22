@@ -25,11 +25,20 @@ public class AppConfig {
     public void load (File configFile) throws IOException {
         this.ini = new Ini(configFile);
         this.runSection = this.ini.get("Run");
+
+        //get supported platforms
+        String supportedPlatformsStr = runSection.get("supportedPlatforms");
+
+        String[] array = supportedPlatformsStr.split(",");
+
+        for (String platformName : array) {
+            this.supportedPlatforms.add(platformName);
+        }
     }
 
     public String getRunCMD (String platformName) {
         if (!supportedPlatforms.contains(platformName)) {
-            throw new IllegalStateException("platform isnt supported.");
+            throw new IllegalStateException("platform isnt supported: " + platformName);
         }
 
         if (!this.ini.containsKey("Run" + platformName)) {

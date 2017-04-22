@@ -4,13 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jukusoft.updater.Updater;
 import com.jukusoft.updater.config.AppConfig;
 import com.jukusoft.updater.skin.SkinFactory;
 import com.jukusoft.updater.utils.FileUtils;
 import com.jukusoft.updater.utils.GameTime;
+import com.jukusoft.updater.utils.PlatformUtils;
+import javafx.application.Platform;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +38,9 @@ public class UpdaterUI extends Updater {
 
     protected AppConfig appConfig = new AppConfig();
 
+    //buttons
+    protected TextButton startButton = null;
+
     @Override
     protected void onCreate(AssetManager assetManager) {
         //TODO: read background image from configuration
@@ -54,6 +62,19 @@ public class UpdaterUI extends Updater {
 
         //this.uiStage.s
         Gdx.input.setInputProcessor(this.uiStage);
+
+        this.startButton = new TextButton("Start Game", this.uiSkin);
+        this.startButton.setPosition(VIEWPORT_WIDTH - 120, 20);
+        this.startButton.setWidth(100);
+        this.startButton.setHeight(50);
+        this.startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                //start game
+                startGame();
+            }
+        });
+        this.uiStage.addActor(this.startButton);
 
         //load configuration
         try {
@@ -80,6 +101,33 @@ public class UpdaterUI extends Updater {
 
         //draw UI stage
         this.uiStage.draw();
+    }
+
+    protected void startGame () {
+        //get operating system name
+        String OS = System.getProperty("os.name").toLowerCase();
+
+        //get start command
+        String cmd = appConfig.getRunCMD(PlatformUtils.getNormalizedPlatformName());
+
+        System.out.println("execute start command: " + cmd);
+
+        //execute command
+        try {
+            Process process = Runtime.getRuntime().exec(cmd);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            //write crash dump
+            try {
+                FileUtils.writeFile("./launcher-startup-crash.log", e.getLocalizedMessage(), StandardCharsets.UTF_8);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                System.exit(1);
+            }
+
+            System.exit(1);
+        }
     }
 
 }
