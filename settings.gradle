@@ -1,2 +1,4 @@
 rootProject.name = 'updater'
+include 'core'
+include 'desktop'
 
