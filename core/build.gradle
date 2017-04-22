@@ -25,6 +25,9 @@ configurations.all {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
+    //ini4j
+    compile "org.ini4j:ini4j:$ini4jVersion"
+
     //libGDX
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 

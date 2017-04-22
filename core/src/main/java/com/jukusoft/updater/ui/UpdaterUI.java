@@ -7,8 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.jukusoft.updater.Updater;
+import com.jukusoft.updater.config.AppConfig;
 import com.jukusoft.updater.skin.SkinFactory;
+import com.jukusoft.updater.utils.FileUtils;
 import com.jukusoft.updater.utils.GameTime;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by Justin on 22.04.2017.
@@ -24,6 +30,8 @@ public class UpdaterUI extends Updater {
     protected Stage uiStage = null;
 
     protected boolean updateable = false;
+
+    protected AppConfig appConfig = new AppConfig();
 
     @Override
     protected void onCreate(AssetManager assetManager) {
@@ -46,6 +54,23 @@ public class UpdaterUI extends Updater {
 
         //this.uiStage.s
         Gdx.input.setInputProcessor(this.uiStage);
+
+        //load configuration
+        try {
+            this.appConfig.load(new File("./config/launcher.cfg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            //write crash dump
+            try {
+                FileUtils.writeFile("./updater-crash.log", e.getLocalizedMessage(), StandardCharsets.UTF_8);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                System.exit(1);
+            }
+
+            System.exit(1);
+        }
     }
 
     @Override
