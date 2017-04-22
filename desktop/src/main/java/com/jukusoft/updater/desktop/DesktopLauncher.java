@@ -15,9 +15,9 @@ public class DesktopLauncher {
 
     public static void main (String[] args) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Space Chaos";
-        config.height = 720;
-        config.width = 1280;
+        config.title = "Launcher";
+        config.height = 500;
+        config.width = 600;
         //config.addIcon("./data/icons/icon.png", Files.FileType.Absolute);
 
         try {
