@@ -3,6 +3,7 @@ package com.jukusoft.updater.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.jukusoft.updater.Updater;
+import com.jukusoft.updater.ui.UpdaterUI;
 import com.jukusoft.updater.utils.FileUtils;
 
 import java.io.IOException;
@@ -18,11 +19,12 @@ public class DesktopLauncher {
         config.title = "Launcher";
         config.height = 500;
         config.width = 600;
+        config.resizable = false;
         //config.addIcon("./data/icons/icon.png", Files.FileType.Absolute);
 
         try {
             //start game
-            new LwjglApplication(new Updater(), config);
+            new LwjglApplication(new UpdaterUI(), config);
         } catch (Exception e) {
             e.printStackTrace();
 
