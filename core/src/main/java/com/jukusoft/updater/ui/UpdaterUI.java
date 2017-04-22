@@ -75,6 +75,7 @@ public class UpdaterUI extends Updater {
                 updateGame();
             }
         });
+        this.uiStage.addActor(this.updateButton);
 
         this.startButton = new TextButton("Start Game", this.uiSkin);
         this.startButton.setPosition(VIEWPORT_WIDTH - 120, 20);
