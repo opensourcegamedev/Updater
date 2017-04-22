@@ -39,6 +39,7 @@ public class UpdaterUI extends Updater {
     protected AppConfig appConfig = new AppConfig();
 
     //buttons
+    protected TextButton updateButton = null;
     protected TextButton startButton = null;
 
     @Override
@@ -62,6 +63,18 @@ public class UpdaterUI extends Updater {
 
         //this.uiStage.s
         Gdx.input.setInputProcessor(this.uiStage);
+
+        this.updateButton = new TextButton("Update", this.uiSkin);
+        this.updateButton.setPosition(VIEWPORT_WIDTH - 220, 20);
+        this.updateButton.setWidth(100);
+        this.updateButton.setHeight(50);
+        this.updateButton.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                //update game
+                updateGame();
+            }
+        });
 
         this.startButton = new TextButton("Start Game", this.uiSkin);
         this.startButton.setPosition(VIEWPORT_WIDTH - 120, 20);
@@ -128,6 +141,10 @@ public class UpdaterUI extends Updater {
 
             System.exit(1);
         }
+    }
+
+    protected void updateGame () {
+        //
     }
 
 }
