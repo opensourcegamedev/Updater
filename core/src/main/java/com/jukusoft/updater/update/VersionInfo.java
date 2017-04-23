@@ -1,5 +1,6 @@
 package com.jukusoft.updater.update;
 
+import com.jukusoft.updater.utils.WebsiteUtils;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 
@@ -17,9 +18,22 @@ public class VersionInfo {
     protected int ownBuild = 0;
     protected String ownVersion = "";
 
-    public VersionInfo () {
+    //newest build of game
+    protected int newestBuild = 0;
+    protected String newestVersion = "Unknown";
+
+    protected boolean updateAvailable = false;
+
+    protected String updateInfoPath = "";
+
+    public VersionInfo (String updateInfoPath) {
+        this.updateInfoPath = updateInfoPath;
+
         //get own build
         loadOwnVersion();
+
+        //get newest version
+        this.loadNewestVersion();
     }
 
     public void loadOwnVersion () {
@@ -36,12 +50,36 @@ public class VersionInfo {
         }
     }
 
+    public void loadNewestVersion () {
+        //get website content of info file
+        try {
+            String content = WebsiteUtils.getWebsiteContent(this.updateInfoPath);
+
+            System.out.println(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.updateAvailable = false;
+        }
+    }
+
     public int getOwnBuild () {
         return this.ownBuild;
     }
 
     public String getOwnVersion () {
         return this.ownVersion;
+    }
+
+    public int getNewestBuild () {
+        return this.newestBuild;
+    }
+
+    public String getNewestVersion () {
+        return this.newestVersion;
+    }
+
+    public boolean isUpdateAvailable () {
+        return this.updateAvailable;
     }
 
 }

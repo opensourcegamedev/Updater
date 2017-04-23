@@ -60,14 +60,19 @@ public class UpdaterUI extends Updater {
     protected BitmapFont font = null;
     protected BitmapFont fontWhite = null;
 
-    protected VersionInfo versionInfo = new VersionInfo();
+    protected VersionInfo versionInfo = null;
 
     protected Label ownBuildLabel = null;
     protected Label ownVersionLabel = null;
+    protected Label newestBuildLabel = null;
+    protected Label newestVersionLabel = null;
+    protected Label updateAvailableLabel = null;
 
     @Override
     protected void onCreate(AssetManager assetManager) {
         //TODO: read background image from configuration
+
+        this.versionInfo = new VersionInfo("http://spacechaos.de/updates/updateInfo.xml");
 
         //load assets
         assetManager.load(BG_IMAGE_PATH, Texture.class);
@@ -100,6 +105,11 @@ public class UpdaterUI extends Updater {
         });
         this.uiStage.addActor(this.updateButton);
 
+        //hide button, if no update is available
+        if (!this.versionInfo.isUpdateAvailable()) {
+            this.updateButton.setVisible(false);
+        }
+
         this.startButton = new TextButton("Start Game", this.uiSkin);
         this.startButton.setPosition(VIEWPORT_WIDTH - 120, 20);
         this.startButton.setWidth(100);
@@ -113,6 +123,7 @@ public class UpdaterUI extends Updater {
         });
         this.uiStage.addActor(this.startButton);
 
+        //labels
         this.ownBuildLabel = new Label("Own Build: " + this.versionInfo.getOwnBuild(), this.uiSkin);
         this.ownBuildLabel.setPosition(VIEWPORT_WIDTH - 400, VIEWPORT_HEIGHT - 100);
         this.uiStage.addActor(this.ownBuildLabel);
@@ -120,6 +131,18 @@ public class UpdaterUI extends Updater {
         this.ownVersionLabel = new Label("Own Version: " + this.versionInfo.getOwnVersion(), this.uiSkin);
         this.ownVersionLabel.setPosition(VIEWPORT_WIDTH - 400, VIEWPORT_HEIGHT - 120);
         this.uiStage.addActor(this.ownVersionLabel);
+
+        this.newestBuildLabel = new Label("Newest Build: " + this.versionInfo.getNewestBuild(), this.uiSkin);
+        this.newestBuildLabel.setPosition(VIEWPORT_WIDTH - 400, VIEWPORT_HEIGHT - 140);
+        this.uiStage.addActor(this.newestBuildLabel);
+
+        this.newestVersionLabel = new Label("Newest Version: " + this.versionInfo.getNewestVersion(), this.uiSkin);
+        this.newestVersionLabel.setPosition(VIEWPORT_WIDTH - 400, VIEWPORT_HEIGHT - 160);
+        this.uiStage.addActor(this.newestVersionLabel);
+
+        this.updateAvailableLabel = new Label("Update available: " + (this.versionInfo.isUpdateAvailable() ? "Yes" : "No") + "", this.uiSkin);
+        this.updateAvailableLabel.setPosition(VIEWPORT_WIDTH - 400, VIEWPORT_HEIGHT - 180);
+        this.uiStage.addActor(this.updateAvailableLabel);
 
         //load configuration
         try {

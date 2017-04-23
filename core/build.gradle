@@ -28,6 +28,9 @@ dependencies {
     //ini4j
     compile "org.ini4j:ini4j:$ini4jVersion"
 
+    //dom4j (XML Parser)
+    compile "org.dom4j:dom4j:2.0.0"
+
     //libGDX
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 
