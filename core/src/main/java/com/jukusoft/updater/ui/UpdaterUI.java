@@ -19,14 +19,13 @@ import com.jukusoft.updater.config.AppConfig;
 import com.jukusoft.updater.font.BitmapFontFactory;
 import com.jukusoft.updater.skin.SkinFactory;
 import com.jukusoft.updater.update.VersionInfo;
-import com.jukusoft.updater.utils.FileUtils;
-import com.jukusoft.updater.utils.GameTime;
-import com.jukusoft.updater.utils.PlatformUtils;
+import com.jukusoft.updater.utils.*;
 import javafx.application.Platform;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.zip.ZipFile;
 
 /**
  * Created by Justin on 22.04.2017.
@@ -232,6 +231,9 @@ public class UpdaterUI extends Updater {
 
             System.exit(1);
         }
+
+        //exit launcher after start game
+        System.exit(0);
     }
 
     protected void updateGame () {
@@ -243,9 +245,50 @@ public class UpdaterUI extends Updater {
 
         this.isUpdating = true;
 
+        //update progressbar
+        this.updateText = "Get ZIP url...";
+        this.filledBar.setValue(2);
+        this.filledBar.setText("2%");
+
         //get URL to zip file
         String zipPath = this.versionInfo.getNewestVersionZIPURL();
         System.out.println("path to ZIP file: " + zipPath);
+
+        //update progressbar
+        this.updateText = "Download ZIP file...";
+        this.filledBar.setValue(20);
+        this.filledBar.setText("20%");
+
+        //delete old update files, if neccessary
+        if (new File("./update.zip").exists()) {
+            new File("./update.zip").delete();
+        }
+
+        //download zip
+        try {
+            WebsiteUtils.downloadFile(zipPath, "./update.zip");
+        } catch (IOException e) {
+            e.printStackTrace();
+            isUpdating = false;
+
+            this.startButton.setVisible(true);
+
+            return;
+        }
+
+        //update progressbar
+        this.updateText = "Extract ZIP file...";
+        this.filledBar.setValue(50);
+        this.filledBar.setText("50%");
+
+        ZIPUtils.unZipIt("./update.zip", ".");
+
+        //update progressbar
+        this.updateText = "Done...";
+        this.filledBar.setValue(100);
+        this.filledBar.setText("100%");
+
+        this.startButton.setVisible(true);
     }
 
 }
