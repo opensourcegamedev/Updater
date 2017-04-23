@@ -1,6 +1,11 @@
 package com.jukusoft.updater.update;
 
+import com.jukusoft.updater.utils.Dom4JUtils;
 import com.jukusoft.updater.utils.WebsiteUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.Node;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 
@@ -25,6 +30,7 @@ public class VersionInfo {
     protected boolean updateAvailable = false;
 
     protected String updateInfoPath = "";
+    protected Element updateInfoRootNode = null;
 
     public VersionInfo (String updateInfoPath) {
         this.updateInfoPath = updateInfoPath;
@@ -54,9 +60,25 @@ public class VersionInfo {
         //get website content of info file
         try {
             String content = WebsiteUtils.getWebsiteContent(this.updateInfoPath);
+            Document document = Dom4JUtils.createFromString(content);
+
+            //get XML root element
+            Element root = document.getRootElement();
+            this.updateInfoRootNode = root;
+
+            Node currentBuildNode = root.selectSingleNode("//updates/currentBuild");
+            this.newestBuild = Integer.parseInt(currentBuildNode.getStringValue());
+
+            Node currentVersionNode = root.selectSingleNode("//updates/currentVersion");
+            this.newestVersion = currentVersionNode.getStringValue();
+
+            this.updateAvailable = this.newestBuild > this.ownBuild;
 
             System.out.println(content);
         } catch (IOException e) {
+            e.printStackTrace();
+            this.updateAvailable = false;
+        } catch (DocumentException e) {
             e.printStackTrace();
             this.updateAvailable = false;
         }
