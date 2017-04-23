@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,6 +18,7 @@ import com.jukusoft.updater.Updater;
 import com.jukusoft.updater.config.AppConfig;
 import com.jukusoft.updater.font.BitmapFontFactory;
 import com.jukusoft.updater.skin.SkinFactory;
+import com.jukusoft.updater.update.VersionInfo;
 import com.jukusoft.updater.utils.FileUtils;
 import com.jukusoft.updater.utils.GameTime;
 import com.jukusoft.updater.utils.PlatformUtils;
@@ -57,6 +59,11 @@ public class UpdaterUI extends Updater {
 
     protected BitmapFont font = null;
     protected BitmapFont fontWhite = null;
+
+    protected VersionInfo versionInfo = new VersionInfo();
+
+    protected Label ownBuildLabel = null;
+    protected Label ownVersionLabel = null;
 
     @Override
     protected void onCreate(AssetManager assetManager) {
@@ -105,6 +112,14 @@ public class UpdaterUI extends Updater {
             }
         });
         this.uiStage.addActor(this.startButton);
+
+        this.ownBuildLabel = new Label("Own Build: " + this.versionInfo.getOwnBuild(), this.uiSkin);
+        this.ownBuildLabel.setPosition(VIEWPORT_WIDTH - 400, VIEWPORT_HEIGHT - 100);
+        this.uiStage.addActor(this.ownBuildLabel);
+
+        this.ownVersionLabel = new Label("Own Version: " + this.versionInfo.getOwnVersion(), this.uiSkin);
+        this.ownVersionLabel.setPosition(VIEWPORT_WIDTH - 400, VIEWPORT_HEIGHT - 120);
+        this.uiStage.addActor(this.ownVersionLabel);
 
         //load configuration
         try {
