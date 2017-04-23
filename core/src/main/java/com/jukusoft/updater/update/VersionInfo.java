@@ -104,4 +104,9 @@ public class VersionInfo {
         return this.updateAvailable;
     }
 
+    public String getNewestVersionZIPURL () {
+        Node node = this.updateInfoRootNode.selectSingleNode("//updates/newestVersionZIP");
+        return node.getStringValue();
+    }
+
 }

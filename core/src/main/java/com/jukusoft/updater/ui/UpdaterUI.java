@@ -72,7 +72,7 @@ public class UpdaterUI extends Updater {
     protected void onCreate(AssetManager assetManager) {
         //TODO: read background image from configuration
 
-        this.versionInfo = new VersionInfo("http://spacechaos.de/updates/updateInfo.xml");
+        this.versionInfo = new VersionInfo("http://spacechaos.de/updates/updateInfo.php");
 
         //load assets
         assetManager.load(BG_IMAGE_PATH, Texture.class);
@@ -242,6 +242,10 @@ public class UpdaterUI extends Updater {
         startButton.setVisible(false);
 
         this.isUpdating = true;
+
+        //get URL to zip file
+        String zipPath = this.versionInfo.getNewestVersionZIPURL();
+        System.out.println("path to ZIP file: " + zipPath);
     }
 
 }
