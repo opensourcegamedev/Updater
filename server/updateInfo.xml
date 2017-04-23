@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <currentVersion>1.0.0 Pre-Alpha</currentVersion>
+    <currentBuild>1</currentBuild>
+    <update version="1.0.0 Pre-Alpha">
+        <zipFile>http://spacechaos.de/updates/SpaceChaos_PreAlpha_1.zip</zipFile>
+        <changelog>
+            First pre-alpha of SpacehChaos! Look at http://spacechaos.de for more information!
+        </changelog>
+    </update>
+</updates>
